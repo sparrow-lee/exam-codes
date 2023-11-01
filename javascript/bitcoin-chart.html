@@ -35,8 +35,8 @@
         let gSelectedCoins = [];   // 선택된 코인 정보
         let gSelectedUnitIndex = 7;  // 시간 표시 정보 (index)
         let gSelectedUnitValue = ''; // 시간 표시 정보
-        let gIntervalId;
-        let gInterval;
+        let gIntervalId;             // 주기적으로 차트 업데이트를 할 때, interval Id
+        let gInterval;               // interval 간격 시간 (ms)
 
         async function onLoad() {
             console.log('> onLoad')
@@ -52,10 +52,11 @@
             setSelectTags()
             console.log('set select list');
 
+            // 저장된 캔들 시간 유닛 읽어오기
             gSelectedUnitIndex = getData("candleUnit");
             if (gSelectedUnitIndex == undefined) {
                 console.log('gSelectedUnitIndex = undefined');
-                gSelectedUnitIndex = 7;
+                gSelectedUnitIndex = 7; // 디폴드 4시간봉
                 setData("candleUnit", 7);
             }
             let selectUnitElement = document.getElementById("selectUnit");
@@ -64,6 +65,7 @@
 
             console.log("selectUnitElement.options[e.selectedIndex] : " + gSelectedUnitValue);
 
+            // 유저가 선택했던 코인 리스트 읽어오기
             let savedValue = getData("markets");
             console.log(`getData market=${savedValue}`);
             if (savedValue && savedValue.length > 3) {
@@ -85,13 +87,13 @@
             let idx = 0;
             gSelectedCoins.forEach(coin => {
                 setSelectMarket(idx, gAllCoinsInfo.KRWDict[coin.market].index + 1)
-
                 idx += 1;
             })
             console.log(JSON.stringify(gSelectedCoins));
             console.log('> init done')
         }
 
+        // 캔들 시간 유닛 변경 시. localStorage에 업데이트 후 차트 다시 그리기
         async function selectUnitOnChange(index, unit, text) {
             console.log(`> selectUnitOnChange > index=${index}, unit value=${unit}, text=${text}`);
             gSelectedUnitIndex = index;
@@ -131,6 +133,7 @@
             await redrawAll();
         }
 
+        // 코인 셀렉트에서 변경 시
         async function selectOnChange(selId, value, text) {
             console.log(`> selectOnChange${selId} : ${value}, ${text}`);
             gSelectedCoins[selId] = {
@@ -159,6 +162,7 @@
             }
         }
 
+        // 전체 차트 시세 읽어와서 다시 그리기
         async function redrawAll() {
             console.log('> redrawAll');
             console.log(JSON.stringify(gSelectedCoins));
