@@ -251,7 +251,6 @@
                             return true;
                         }
                     }
-
                 }
             })
 
@@ -297,6 +296,7 @@
             gEnemyMissiles.forEach(m => {
                 if (m.alive) aliveMissile += 1;
             });
+
             // fire enemy missile
             if (gNextEnemyMissile > 0) {
                 gNextEnemyMissile -= 1;
@@ -327,8 +327,7 @@
                                 let vx = (dx * speed / distance) * (enemy.x < gPlayer.x ? 1 : -1);
                                 let vy = (dy * speed / distance) * (enemy.y < gPlayer.y ? 1 : -1);
                 
-                                missile.launch({x: enemy.x, y: enemy.y, size: ENEMY_MISSILE_SIZE, vx, vy})
-
+                                missile.launch({x: enemy.x, y: enemy.y, size: ENEMY_MISSILE_SIZE, vx, vy});
                                 return true;
                             }
                         }
@@ -403,7 +402,6 @@
             gContext.fillStyle = 'black';
             gContext.font = "16px arial";
             gContext.fillText(`Score ${gPlayer.score}`, 160, gCanvasHeight - 25);
-            
 
             window.requestAnimationFrame(draw);
         }
